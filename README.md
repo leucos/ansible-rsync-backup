@@ -1,5 +1,7 @@
-rbackup Ansible playbook
-========================
+rsync_backup Ansible playbook
+=============================
+
+This role will deploy rsync-backup.sh, a simple rsync-based differential backup script with history purge.
 
 Requirements
 ------------
@@ -8,6 +10,8 @@ None
 
 Role Variables
 --------------
+
+Beside deploying the scipt, this role can manage your backup crontab for you if you populate `rsync_backup_crons`:
 
   - `rsync_backup_crons`: list of dicts containing the following items:
     - `name`: a unique name for the backup
@@ -19,6 +23,28 @@ Role Variables
     - `hour`: cron-compatible hour specification
     - `minute`: cron-compatible minute specification
     - `log`: log file name (will be written in  /var/log/rbackup/ and rotated)
+
+Example
+-------
+
+```
+rsync_backup_crons:
+  - name: Some files
+    source: /vagrant
+    destination: /backupvagrant
+    keep: 5
+    day: "*"
+    hour: 1
+    minute: 5
+  - name: Some other files
+    source: /etc/logrotate.d
+    destination: /backuplogrotate
+    keep: 3
+    day: "*"
+    hour: 5
+    minute: 15
+    log: backuplogrotate.log
+```
 
 Tags
 ----

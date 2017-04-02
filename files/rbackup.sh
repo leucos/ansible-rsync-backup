@@ -89,9 +89,11 @@ function backup() {
   logverbose "Executing ${RSYNC} ${RSYNC_OPTS} --link-dest ${LOCAL_DESTINATION}/current/ ${REMOTE_SOURCE} ${LOCAL_DESTINATION}/${DATE}/"
   # We check if this is the first backup and skip link-dest
   if [ ! -L "${LOCAL_DESTINATION}/current/" ]; then
+    loginfo "First backup - using normal mode"
     # shellcheck disable=SC2086
     ${RSYNC} ${RSYNC_OPTS} "${REMOTE_SOURCE}" "${LOCAL_DESTINATION}/${DATE}/"
   else
+    loginfo "Normal backup - using link-dest"
     # shellcheck disable=SC2086
     ${RSYNC} ${RSYNC_OPTS} --link-dest "${LOCAL_DESTINATION}/current/" "${REMOTE_SOURCE}" "${LOCAL_DESTINATION}/${DATE}/"
   fi
