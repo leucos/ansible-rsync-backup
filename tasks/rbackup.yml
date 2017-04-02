@@ -1,0 +1,32 @@
+- name: Installs rsync-backup script
+  copy:
+    src: rbackup.sh
+    dest: /usr/local/bin/rbackup.sh
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Creates rbackup log dir
+  file:
+    path: /var/log/rbackup/
+    state: directory
+
+- name: Ensures destinations exist
+  file:
+    path: "{{ item.destination }}"
+    state: directory
+  with_items: "{{ rsync_backup_crons }}"
+
+- name: Adds backup cron jobs
+  cron:
+    name: "{{ item.name }}"
+    job: /usr/local/bin/rbackup.sh -s {{ item.source }} -d {{ item.destination }} -ck {{ item.keep | default(10) }} -l /var/log/rbackup/{{ item.log | default("rbackup.log") }}
+    day: "{{ item.day }}"
+    hour: "{{ item.hour }}"
+    minute: "{{ item.minute }}"
+  with_items: "{{ rsync_backup_crons }}"
+
+- name: Adds logrotate configuration
+  template:
+    src: rbackup.logrotate.j2
+    dest: /etc/logrotate.d/rbackup

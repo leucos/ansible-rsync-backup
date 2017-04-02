@@ -1,0 +1,14 @@
+# - name: Debug that all items contains the proper fields
+#   debug:
+#     msg: "{{ item.0 }} -> {{ item[1][item.0] }}"
+#   with_nested:
+#     - [ "day", "hour", "minute", "name", "source", "destination"]
+#     - "{{ rsync_backup_crons }}"
+
+- name: Checks that all items contains the proper fields
+  fail:
+    msg: "The field {{ item.0 }} must be present in all rsync_backup_crons entries"
+  when: "item[1][item.0] is undefined"
+  with_nested:
+    - [ "day", "hour", "minute", "name", "source", "destination"]
+    - "{{ rsync_backup_crons }}"

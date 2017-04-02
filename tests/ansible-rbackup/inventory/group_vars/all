@@ -1,0 +1,16 @@
+rsync_backup_crons:
+  - name: Some files
+    source: /vagrant
+    destination: /backupvagrant
+    keep: 5
+    day: "*"
+    hour: 1
+    minute: 5
+  - name: Some other files
+    source: /etc/logrotate.d
+    destination: /backuplogrotate
+    keep: 3
+    day: "*"
+    hour: 5
+    minute: 15
+    log: backuplogrotate.log

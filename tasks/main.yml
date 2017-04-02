@@ -1,0 +1,8 @@
+- include: check_vars.yml
+  tags:
+    - rbackup
+    - check
+
+- include: rbackup.yml
+  tags:
+    - rbackup
