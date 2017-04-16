@@ -91,11 +91,11 @@ function backup() {
   if [ ! -L "${LOCAL_DESTINATION}/current" ]; then
     loginfo "First backup - using full mode"
     # shellcheck disable=SC2086
-    ${RSYNC} ${RSYNC_OPTS} ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/"
+    ${RSYNC} ${RSYNC_OPTS} ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/" >> "${LOG_FILE}" 2>&1
   else
     loginfo "Diff backup - using link-dest"
     # shellcheck disable=SC2086
-    ${RSYNC} ${RSYNC_OPTS} --link-dest "${LOCAL_DESTINATION}/current/" ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/"
+    ${RSYNC} ${RSYNC_OPTS} --link-dest "${LOCAL_DESTINATION}/current/" ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/" >> "${LOG_FILE}" 2>&1
   fi
 
   sync
@@ -143,7 +143,7 @@ function parse() {
   ERROR_COUNT=0
   KEEP=0                            # keep everything by default
   LOCAL_DESTINATION=""
-  LOG_FILE=""
+  LOG_FILE="/dev/null"
   REMOTE_SOURCE=""
   RSYNC=$(which rsync 2> /dev/null) # find rsync
   RSYNC_COMPRESS=""                 # do not compress by default
