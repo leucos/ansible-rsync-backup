@@ -91,11 +91,11 @@ function backup() {
   if [ ! -L "${LOCAL_DESTINATION}/current" ]; then
     loginfo "First backup - using full mode"
     # shellcheck disable=SC2086
-    ${RSYNC} ${RSYNC_OPTS} "${REMOTE_SOURCE}" "${LOCAL_DESTINATION}/${DATE}/"
+    ${RSYNC} ${RSYNC_OPTS} ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/"
   else
-    loginfo "Normal backup - using link-dest"
+    loginfo "Diff backup - using link-dest"
     # shellcheck disable=SC2086
-    ${RSYNC} ${RSYNC_OPTS} --link-dest "${LOCAL_DESTINATION}/current/" "${REMOTE_SOURCE}" "${LOCAL_DESTINATION}/${DATE}/"
+    ${RSYNC} ${RSYNC_OPTS} --link-dest "${LOCAL_DESTINATION}/current/" ${REMOTE_SOURCE} "${LOCAL_DESTINATION}/${DATE}/"
   fi
 
   sync
